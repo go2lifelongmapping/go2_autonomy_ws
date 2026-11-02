@@ -10,8 +10,8 @@ Môi trường Ubuntu 20.04 + ROS2 Foxy + CycloneDDS 0.10.x (bản Go2 dùng) đ
 ## Lần đầu
 
 ```bash
-git clone <repo này> autonomy_stack_go2
-cd autonomy_stack_go2
+git clone https://github.com/go2lifelongmapping/go2_autonomy_ws.git
+cd go2_autonomy_ws
 ./docker/run.sh            # build image (lần đầu ~10 phút) và mở shell trong container
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
@@ -22,9 +22,9 @@ Mỗi terminal mới: chạy lại `./docker/run.sh` (dùng chung container đan
 
 | Trên máy host | Trong container | Nội dung |
 |---|---|---|
-| `autonomy_stack_go2/` | `~/autonomy_stack_go2` | Code, `build/`, `install/` |
-| `autonomy_stack_go2/calib/` | `~/Desktop` | `imu_calib_data.yaml`, `lidar_calib_data.yaml` (riêng cho từng con Go2) |
-| `autonomy_stack_go2/bags/` | `~/autonomy_stack_go2/bags` | Bagfile |
+| `go2_autonomy_ws/` | `~/autonomy_stack_go2` | Code, `build/`, `install/` |
+| `go2_autonomy_ws/calib/` | `~/Desktop` | `imu_calib_data.yaml`, `lidar_calib_data.yaml` (riêng cho từng con Go2) |
+| `go2_autonomy_ws/bags/` | `~/autonomy_stack_go2/bags` | Bagfile |
 
 `calib/` và `bags/` không được đưa lên git: khi chuyển sang máy khác phải chép `calib/` theo.
 
