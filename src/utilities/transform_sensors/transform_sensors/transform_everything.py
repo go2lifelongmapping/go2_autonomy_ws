@@ -62,7 +62,20 @@ class Repuber(Node):
         self.ang_bias_z = calib_data['ang_bias_z']
         self.ang_z2x_proj = calib_data['ang_z2x_proj']
         self.ang_z2y_proj = calib_data['ang_z2y_proj']
-                
+
+        # Lidar rotation (roll, pitch, yaw) from the /utlidar/cloud frame to body. Newer Go2 firmware
+        # publishes the cloud in a different frame, so it can be overridden per robot
+        lidar_rpy = [0.0, 2.87820258505555555556, 0.0]
+        try:
+            lidar_calib_file_path = os.path.join(os.path.expanduser('~'), 'Desktop/lidar_calib_data.yaml')
+            lidar_calib_file = open(lidar_calib_file_path, 'r')
+            lidar_calib_data = yaml.load(lidar_calib_file, Loader=yaml.FullLoader)
+            lidar_rpy = [lidar_calib_data['lidar_roll'], lidar_calib_data['lidar_pitch'], lidar_calib_data['lidar_yaw']]
+            print("lidar_calib_data.yaml loaded")
+            lidar_calib_file.close()
+        except:
+            print("lidar_calib_data.yaml not found, using default lidar rotation")
+
         self.body2cloud_trans = TransformStamped()
         self.body2cloud_trans.header.stamp = self.get_clock().now().to_msg()
         self.body2cloud_trans.header.frame_id = "body"
@@ -70,7 +83,7 @@ class Repuber(Node):
         self.body2cloud_trans.transform.translation.x = 0.0
         self.body2cloud_trans.transform.translation.y = 0.0
         self.body2cloud_trans.transform.translation.z = 0.0
-        quat = tf_transformations.quaternion_from_euler(0, 2.87820258505555555556, 0)
+        quat = tf_transformations.quaternion_from_euler(lidar_rpy[0], lidar_rpy[1], lidar_rpy[2])
         self.body2cloud_trans.transform.rotation.x = quat[0]
         self.body2cloud_trans.transform.rotation.y = quat[1]
         self.body2cloud_trans.transform.rotation.z = quat[2]

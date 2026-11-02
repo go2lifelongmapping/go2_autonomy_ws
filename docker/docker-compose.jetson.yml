@@ -1,0 +1,12 @@
+# Extra settings for the Go2 onboard computer (Jetson, arm64). run.sh adds this file automatically there.
+services:
+  go2:
+    build:
+      args:
+        BASE_IMAGE: ros:foxy-ros-base-focal
+    image: go2-autonomy:foxy-jetson
+    # Jetson GPU for RViz2 (needs the NVIDIA container runtime from JetPack)
+    runtime: nvidia
+    environment:
+      # Onboard interface to the Go2 main board
+      - GO2_IFACE=${GO2_IFACE:-eth0}

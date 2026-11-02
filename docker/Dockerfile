@@ -1,5 +1,7 @@
 # ROS2 Foxy (Ubuntu 20.04) environment for autonomy_stack_go2
-FROM osrf/ros:foxy-desktop
+# osrf/ros:foxy-desktop is amd64 only; the Go2 onboard Jetson (arm64) builds from ros:foxy-ros-base-focal
+ARG BASE_IMAGE=osrf/ros:foxy-desktop
+FROM ${BASE_IMAGE}
 
 ARG USERNAME=go2
 ARG USER_UID=1000
@@ -9,8 +11,12 @@ ARG RENDER_GID=110
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Dependencies from the repo README (external-computer list) plus runtime extras:
+# ros-foxy-desktop (already in the osrf image, needed on the arm64 base), cv_bridge for the camera nodes,
 # gstreamer for go2_h264_repub, matplotlib for visualization_tools, mesa for RViz/Unity
 RUN apt-get update && apt-get install -y --no-install-recommends \
+        ros-foxy-desktop \
+        ros-foxy-cv-bridge \
+        ros-foxy-image-transport \
         libusb-dev \
         ros-foxy-perception-pcl \
         ros-foxy-sensor-msgs-py \

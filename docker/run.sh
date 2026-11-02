@@ -8,5 +8,10 @@ export HOST_UID=$(id -u) HOST_GID=$(id -g)
 export VIDEO_GID=$(getent group video | cut -d: -f3)
 export RENDER_GID=$(getent group render | cut -d: -f3)
 
-docker compose up -d
-docker compose exec go2 bash
+COMPOSE="docker compose"
+if [ "$(uname -m)" = "aarch64" ]; then
+    COMPOSE="docker compose -f docker-compose.yml -f docker-compose.jetson.yml"
+fi
+
+$COMPOSE up -d
+$COMPOSE exec go2 bash
