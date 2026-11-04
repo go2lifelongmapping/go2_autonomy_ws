@@ -26,5 +26,7 @@ services:
       - ..:/home/go2/autonomy_stack_go2
       # calibrate_imu / transform_sensors read and write ~/Desktop/imu_calib_data.yaml
       - ../calib:/home/go2/Desktop
+      # repo copy overrides the one baked into the image, so edits apply without a rebuild
+      - ./unitree_ros2_setup.sh:/opt/unitree_ros2_setup.sh:ro
     stdin_open: true
     tty: true

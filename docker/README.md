@@ -92,3 +92,12 @@ ros2 bag record -o bags/<tên> /utlidar/cloud /utlidar/imu
 ```
 
 Không dùng `unitree_setup.sh` ở thư mục gốc repo (nó source ROS Humble và card mạng `enp3s0`).
+
+## Hệ thống trên Jetson, RViz2 trên laptop (dây hoặc WiFi)
+
+Trên Jetson (trong container): `source /opt/unitree_ros2_setup.sh` rồi `./system_real_robot.sh`. Trên laptop (terminal không ssh): `docker/rviz.sh` (thêm `route` cho chế độ Goalpoint).
+
+- Cắm dây LAN: đi qua dây.
+- Không cắm dây: laptop và Jetson cùng mạng WiFi; **SSH vào Jetson bằng IP WiFi của nó** (`ssh unitree@<IP WiFi Jetson>`) trước khi chạy `./docker/run.sh`. `run.sh` lấy IP laptop từ phiên SSH và đặt `GO2_PEERS`; `rviz.sh` tự tìm Jetson (`ubuntu.local`, hoặc đặt `GO2_JETSON_WIFI=<IP>`) và thêm route tạm tới `192.168.123.18` qua WiFi. Đám mây điểm qua WiFi khoảng 8 Hz.
+
+CycloneDDS trên Jetson chỉ dùng `eth0`: thêm `wlan0` làm mất dữ liệu từ Go2, nên laptop tới Jetson qua địa chỉ `192.168.123.18` bằng route qua WiFi, và hai bên khai báo IP của nhau (unicast peers).
